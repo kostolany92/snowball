@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="ko" 
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+	<head th:fragment="fragHead">
+		<meta charset="UTF-8"/>
+		<title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE"></title>
+		
+		<!-- 공통적인 css -->
+		<link rel="stylesheet" href="/css/common.css" />
+	
+		<!-- 개별적인 css -->
+		<!-- <th:block layout:fragment="css"></th:block> -->
+	</head>
+</html>

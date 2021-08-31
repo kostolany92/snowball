@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ko" 
+	xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorator="layout/layoutDefault">
+
+<head>
+    <title>content1</title>
+</head>
+
+<!-- 페이지의 개별적인 css -->
+<th:block layout:fragment="css">
+	<!-- <link rel="stylesheet" href="css/temp.css" /> -->
+</th:block>
+
+<div layout:fragment="content">
+	this area is content1
+</div>
+
+</html>
