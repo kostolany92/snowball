@@ -10,18 +10,21 @@
 	<!-- [head] 영역 끝 -->
 
 	<body>
-		<!-- [left] 영역 시작 -->
-		<aside th:replace="layout/fragLeft :: fragLeft"></aside>
-		<!-- [left] 영역 끝 -->
+		<!-- [Top] 영역 시작 --> 
+		<nav th:replace="layout/fragTop :: fragTop"></nav>
+		<!-- [Top] 영역 끝 -->
 		
-		<div class="content">
-			<!-- [header] 영역 시작 --> 
-			<header th:replace="layout/fragHeader :: fragHeader"></header>
-			<!-- [header] 영역 끝 -->
-			
-			<!-- [content] 영역 시작 -->
-			<div layout:fragment="content"></div>
-			<!-- [content] 영역 끝 -->
+		<div class="container-fluid">
+			<div class="row">
+				<!-- [left] 영역 시작 -->
+				<!-- <aside th:replace="layout/fragLeft :: fragLeft"></aside> -->
+				<div th:replace="layout/fragLeft :: fragLeft"></div>
+				<!-- [left] 영역 끝 -->
+				
+				<!-- [content] 영역 시작 -->
+				<div layout:fragment="content"></div>
+				<!-- [content] 영역 끝 -->
+			</div>
 		</div>
 	</body>
 </html>
