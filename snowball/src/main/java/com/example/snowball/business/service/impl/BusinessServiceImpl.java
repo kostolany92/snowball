@@ -14,21 +14,18 @@ public class BusinessServiceImpl implements BusinessService {
 
 	@Autowired
 	private BusinessDao businessDao;
-	
+
 	@Override
-	public List<BusinessVo> listStatus(BusinessSearchVo businessSearchVo) throws Exception {
-		
+	public List<BusinessVo> list(BusinessSearchVo businessSearchVo) throws Exception {
+
 		// 1. DB 조회
-		List<BusinessVo> statusList = businessDao.listStatus(businessSearchVo);
+		List<BusinessVo> list = businessDao.listStatus(businessSearchVo);
 		// 2. 없으면 새로 조회후 DB INSERT
-		
+
 		// 3. 다시 DB 조회
-		
-		// 4. 
-		
-		
-		
-		
+
+		// 4.
+
 		return null;
 	}
 }

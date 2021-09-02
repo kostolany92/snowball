@@ -15,8 +15,8 @@ public class BusinessDao {
 
 	@Resource
 	private SqlSessionTemplate sqlSessionTemplate;
-	
+
 	public List<BusinessVo> listStatus(BusinessSearchVo businessSearchVo) {
-		return sqlSessionTemplate.selectList("businessDao.listStatus", businessSearchVo);
+		return sqlSessionTemplate.selectList("businessDao.list", businessSearchVo);
 	}
 }

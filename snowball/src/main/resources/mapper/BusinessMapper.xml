@@ -2,30 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
 <mapper namespace="businessDao">
+	<resultMap id="businessListMap" type="com.example.snowball.business.service.vo.BusinessVo">
+	    <result column="uid" 			property="uid"/>
+	    <result column="corp_code" 		property="corpCode"/>
+	    <result column="year" 			property="year"/>
+	    <result column="report_type" 	property="reportType"/>
+	</resultMap>
 
-    <select id="list" resultType="com.example.snowball.business.service.vo.businessVo">
+    <select id="list" resultMap="businessListMap">
 		SELECT uid
-		     , id
-		     , nm
-		     , email
-		  FROM view_org_last_user
-		  WHERE email IS NOT NULL
-		 LIMIT 10;  
-    </select>
-    
-    <select id="listDept" resultType="com.example.myoauth.user.service.vo.UserVo">
-		SELECT uid
-		     , dept_id
-		     , dept_nm
-		  FROM view_org_last_dept
-		 LIMIT 10;  
-    </select>
-
-    <select id="select" resultType="com.example.myoauth.user.service.vo.UserVo" parameterType="String">
-    	SELECT id
-    	     , nm
-    	  FROM view_org_last_user 
-    	 WHERE id = #{value}
+		     , corp_code
+		     , year
+		     , report_type
+		  FROM snowball.tbl_business_content
     </select>
 </mapper>
  
