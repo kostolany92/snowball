@@ -3,7 +3,7 @@
 
 <mapper namespace="businessDao">
 
-    <select id="list" resultType="businessVo">
+    <select id="list" resultType="com.example.snowball.business.service.vo.businessVo">
 		SELECT uid
 		     , id
 		     , nm
