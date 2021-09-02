@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="businessDao">
+
+    <select id="list" resultType="businessVo">
+		SELECT uid
+		     , id
+		     , nm
+		     , email
+		  FROM view_org_last_user
+		  WHERE email IS NOT NULL
+		 LIMIT 10;  
+    </select>
+    
+    <select id="listDept" resultType="com.example.myoauth.user.service.vo.UserVo">
+		SELECT uid
+		     , dept_id
+		     , dept_nm
+		  FROM view_org_last_dept
+		 LIMIT 10;  
+    </select>
+
+    <select id="select" resultType="com.example.myoauth.user.service.vo.UserVo" parameterType="String">
+    	SELECT id
+    	     , nm
+    	  FROM view_org_last_user 
+    	 WHERE id = #{value}
+    </select>
+</mapper>
+ 
