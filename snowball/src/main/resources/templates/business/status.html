@@ -12,7 +12,7 @@
 	<th:block layout:fragment="css">
 		<!-- <link rel="stylesheet" href="css/temp.css" /> -->
 	</th:block>
-
+	
 	<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" layout:fragment="content">
        	<div class="row">
 	       	<div class="col-lg-3">
@@ -26,14 +26,14 @@
        	<div class="col-lg-6">
 			<div class="card tit h_auto">
 				<div class="tab_cont tp4 card_head"> <!-- 연도 틀 -->
-					<div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+					<div id="divLeftYear" class="btn-group btn-group-sm" role="group" aria-label="Basic example" type="L">
       					<button type="button" class="btn btn-default">2021</button>
 					    <button type="button" class="btn btn-default">2020</button>
 					    <button type="button" class="btn btn-default">2019</button>
 					</div>
 				</div>
 				<div class="tab_cont tp4"> <!-- 보고서 틀 -->
-					<div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+					<div id="divLeftReportType" class="btn-group btn-group-sm" role="group" aria-label="Basic example">
       					<button type="button" class="btn btn-default">1분기</button>
 					    <button type="button" class="btn btn-default">반기</button>
 					    <button type="button" class="btn btn-default">3분기</button>
@@ -48,14 +48,14 @@
 		<div class="col-lg-6">
 			<div class="card tit h_auto">
 				<div class="tab_cont tp4 card_head">
-					<div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+					<div id="divRightYear" class="btn-group btn-group-sm" role="group" aria-label="Basic example" type="R">
       					<button type="button" class="btn btn-default">2021</button>
 					    <button type="button" class="btn btn-default">2020</button>
 					    <button type="button" class="btn btn-default">2019</button>
 					</div>
 				</div>
 				<div class="tab_cont tp4">
-					<div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+					<div id="divRightReportType" class="btn-group btn-group-sm" role="group" aria-label="Basic example">
       					<button type="button" class="btn btn-default">1분기</button>
 					    <button type="button" class="btn btn-default">반기</button>
 					    <button type="button" class="btn btn-default">3분기</button>
@@ -67,5 +67,117 @@
 				사업의내용
 			</div>
 		</div>
+		
+		<form id="frmAjax" method="POST">
+		</form>
 	</div>
+	
+	<!-- 페이지의 개별적인 js -->
+	<th:block layout:fragment="js">
+		<script type="text/javascript">
+		$(document).ready(function() {
+			fnInit();
+			fnInitEvent();
+		});
+
+		function fnInit() {
+			fnGetContentYearList();
+		}
+
+		function fnInitEvent() {
+			$('#divLeftYear').on('click', '.contentYear', fnGetReportTypeList);
+			$('#divRightYear').on('click', '.contentYear', fnGetReportTypeList);
+		} 
+		
+		function fnGetContentYearList() {
+			$('.frmAjax').remove();
+			addFormData('frmAjax', 'corpCode', '004250');
+
+			$.ajax({
+				type: 'POST',
+				url: getContextPath() + '/getContentYearList',
+				data : $('#frmAjax').serialize(),
+				dataType: 'json',
+				success: function(data) {
+					var contentYearList = data.contentYearList;
+					var htmlArray = [];
+
+					for(var i = 0, length = contentYearList.length; i < length; i++) {
+						var year = contentYearList[i].year;
+						htmlArray.push('<button type="button" class="btn btn-default contentYear" year=' + year + '>' + year + '</button>');
+					}
+					
+					$('#divLeftYear').html(htmlArray.join(''));
+					$('#divRightYear').html(htmlArray.join(''));
+					
+					$('#divLeftYear').find('.contentYear').eq(0).trigger('click');
+					$('#divRightYear').find('.contentYear').eq(0).trigger('click');
+				},
+				error : function(x, error) {
+					alert("서버통신 중 오류가 발생하였습니다.");
+					console.log(x);
+				}
+			});
+		}
+
+		function fnGetReportTypeList() {
+			var $this = $(this);
+			var $parentDiv = $this.closest('div'); 
+			$parentDiv.find('.contentYear').removeClass('active');
+			$this.addClass('active');
+
+			$('.frmAjax').remove();
+			addFormData('frmAjax', 'corpCode', '004250');
+			addFormData('frmAjax', 'year', $this.attr('year'));
+
+			$.ajax({
+				type: 'POST',
+				url: getContextPath() + '/getReportTypeList',
+				data : $('#frmAjax').serialize(),
+				dataType: 'json',
+				success: function(data) {
+					var reportTypeList = data.reportTypeList;
+					var htmlArray = [];
+
+					for(var i = 0, length = reportTypeList.length; i < length; i++) {
+						var reportType = reportTypeList[i];
+						htmlArray.push('<button type="button" class="btn btn-default reportType" reportType=' + reportType.reportType + '>' + reportType.reportTypeNm + '</button>');
+					}
+
+					if($parentDiv.attr('type') == 'L') {
+						$('#divLeftReportType').html(htmlArray.join(''));
+					} else {
+						$('#divRightReportType').html(htmlArray.join(''));
+					}
+				},
+				error : function(x, error) {
+					alert("서버통신 중 오류가 발생하였습니다.");
+					console.log(x);
+				}
+			});
+		}
+
+		function fnGetContent() {
+			$.ajax({
+				type: 'POST',
+				url: getContextPath() + '/getContent',
+				data : $('#frmAjax').serialize(),
+				dataType: 'json',
+				success: function(data) {
+					var vocInfoList = data.vocInfoList;
+					fnMakeVocInfoList(vocInfoList);
+					if(vocInfoList.length > 0) {
+						fnMakeVocPaging(data.paginationInfo);
+					} else {
+						fnMakeEmptyPaging('vocPaging');
+					}
+				},
+				error : function(x, error) {
+					alert("서버통신 중 오류가 발생하였습니다.");
+					console.log(x);
+				}
+			});
+		}
+		</script>
+	</th:block>
 </html>

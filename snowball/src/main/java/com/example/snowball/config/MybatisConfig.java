@@ -28,7 +28,9 @@ public class MybatisConfig {
 			Resource[] res = new PathMatchingResourcePatternResolver().getResources("classpath:mapper/*Mapper.xml");
 			
 			sessFactory.setMapperLocations(res);
-
+			sessFactory.setConfigLocation(applicationContext.getResource("classpath:mapper/MybatisConfig.xml"));
+			
+			
 			return sessFactory.getObject();
 		}
 		

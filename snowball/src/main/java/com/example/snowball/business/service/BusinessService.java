@@ -7,5 +7,8 @@ import com.example.snowball.business.service.vo.BusinessVo;
 
 public interface BusinessService {
 
-	List<BusinessVo> list(BusinessSearchVo businessSearchVo) throws Exception;
+	List<BusinessVo> listContent(BusinessSearchVo businessSearchVo) throws Exception;
+	List<BusinessVo> listContentYear(BusinessSearchVo businessSearchVo) throws Exception;
+	List<BusinessVo> listReportTypeList(BusinessSearchVo businessSearchVo) throws Exception;
+	int insertContent(BusinessVo businessVo) throws Exception;
 }

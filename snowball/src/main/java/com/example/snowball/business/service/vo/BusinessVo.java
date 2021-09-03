@@ -11,6 +11,7 @@ public class BusinessVo {
 	private String corpCode;
 	private String year;
 	private String reportType;
+	private String reportTypeNm;
 	private String content;
 	private String status;
 }

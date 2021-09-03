@@ -16,7 +16,19 @@ public class BusinessDao {
 	@Resource
 	private SqlSessionTemplate sqlSessionTemplate;
 
-	public List<BusinessVo> listStatus(BusinessSearchVo businessSearchVo) {
-		return sqlSessionTemplate.selectList("businessDao.list", businessSearchVo);
+	public List<BusinessVo> listContent(BusinessSearchVo businessSearchVo) {
+		return sqlSessionTemplate.selectList("businessDao.listContent", businessSearchVo);
+	}
+
+	public List<BusinessVo> listContentYear(BusinessSearchVo businessSearchVo) {
+		return sqlSessionTemplate.selectList("businessDao.listContentYear", businessSearchVo);
+	}
+
+	public int insertContent(BusinessVo businessVo) {
+		return sqlSessionTemplate.insert("businessDao.insertContent", businessVo);
+	}
+
+	public List<BusinessVo> listReportTypeList(BusinessSearchVo businessSearchVo) {
+		return sqlSessionTemplate.selectList("businessDao.listReportTypeList", businessSearchVo);
 	}
 }

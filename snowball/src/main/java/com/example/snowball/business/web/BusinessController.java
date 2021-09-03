@@ -39,11 +39,21 @@ public class BusinessController {
 	}
 	
 	@ResponseBody
-	@RequestMapping("/getStatusList")
-	public Map<String, Object> getStatusList(BusinessSearchVo businessSearchVo) throws Exception {
+	@RequestMapping("/getContentYearList")
+	public Map<String, Object> getContentYearList(BusinessSearchVo businessSearchVo) throws Exception {
 		Map<String, Object> map = new HashMap<String, Object>();
 
-		map.put("statusList", businessService.listStatus(businessSearchVo));
+		map.put("contentYearList", businessService.listContentYear(businessSearchVo));
+		
+		return map;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/getReportTypeList")
+	public Map<String, Object> getReportTypeList(BusinessSearchVo businessSearchVo) throws Exception {
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		map.put("reportTypeList", businessService.listReportTypeList(businessSearchVo));
 		
 		return map;
 	}

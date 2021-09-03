@@ -2,19 +2,64 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
 <mapper namespace="businessDao">
-	<resultMap id="businessListMap" type="com.example.snowball.business.service.vo.BusinessVo">
+	<resultMap id="businessListMap" type="businessVo">
 	    <result column="uid" 			property="uid"/>
 	    <result column="corp_code" 		property="corpCode"/>
 	    <result column="year" 			property="year"/>
 	    <result column="report_type" 	property="reportType"/>
 	</resultMap>
+	
+	<resultMap id="reportTypeListMap" type="businessVo">
+		<result column="uid" 				property="uid"/>
+	    <result column="report_type" 		property="reportType"/>
+	    <result column="report_type_nm" 	property="reportTypeNm"/>
+	</resultMap>
 
-    <select id="list" resultMap="businessListMap">
+    <select id="listContent" resultMap="businessListMap" parameterType="businessSearchVo">
 		SELECT uid
 		     , corp_code
 		     , year
 		     , report_type
 		  FROM snowball.tbl_business_content
+		 WHERE corp_code = #{corpCode}
     </select>
+    
+	<select id="listContentYear" resultMap="reportTypeListMap" parameterType="businessSearchVo">
+		SELECT year
+		  FROM snowball.tbl_business_content
+		 WHERE corp_code = #{corpCode}
+		 GROUP BY year
+		 ORDER BY year DESC
+    </select>
+
+	<select id="listReportType" resultType="businessVo" parameterType="businessSearchVo">
+		SELECT uid
+			 , report_type
+		     , CASE report_type WHEN '1' THEN '1분기'
+		                        WHEN '2' THEN '반기'
+		                        WHEN '3' THEN '3분기'
+		                        WHEN '4' THEN '사업' END AS report_type_nm
+		  FROM snowball.tbl_business_content
+		 WHERE corp_code = #{corpCode}
+		 ORDER BY report_type
+    </select>
+
+    <insert id="insertContent" parameterType="businessVo">
+    	INSERT INTO snowball.tbl_business_content (
+    		corp_code
+    		, year
+    		, report_type
+    		, content
+    		, status
+    		, reg_time
+    	) VALUES (
+    		#{corpCode}
+    		, #{year}
+    		, #{reportType}
+    		, #{content}
+    		, #{status}
+    		, NOW()
+    	)
+    </insert>
 </mapper>
  
