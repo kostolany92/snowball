@@ -5,5 +5,7 @@
 	<typeAliases>
 		<typeAlias type="com.example.snowball.business.service.vo.BusinessVo" alias="businessVo"/>
 		<typeAlias type="com.example.snowball.business.service.vo.BusinessSearchVo" alias="businessSearchVo"/>
+		<typeAlias type="com.example.snowball.corp.service.vo.CorpVo" alias="corpVo"/>
+		<typeAlias type="com.example.snowball.corp.service.vo.CorpSearchVo" alias="corpSearchVo"/>
 	</typeAliases>
 </configuration>

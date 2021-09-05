@@ -6,5 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class BusinessSearchVo {
+	private int uid;
 	private String corpCode;
+	private String year;
 }

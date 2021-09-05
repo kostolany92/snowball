@@ -10,6 +10,18 @@
 	
 	<!-- 페이지의 개별적인 css -->
 	<th:block layout:fragment="css">
+		<style>
+			ins {
+			    text-decoration: none;
+			    background-color: #d4fcbc;
+			}
+			
+			del {
+			    text-decoration: line-through;
+			    background-color: #fbb6c2;
+			    color: #555;
+			}
+		</style>
 		<!-- <link rel="stylesheet" href="css/temp.css" /> -->
 	</th:block>
 	
@@ -23,6 +35,12 @@
 				</div>
 	       	</div>
        	</div>
+       	<div class="row">
+       		<div id="divLeftCompResult" class="col-lg-6">
+       		</div>
+       		<div id="divRightCompResult" class="col-lg-6">
+       		</div>
+       	</div>
        	<div class="col-lg-6">
 			<div class="card tit h_auto">
 				<div class="tab_cont tp4 card_head"> <!-- 연도 틀 -->
@@ -33,7 +51,7 @@
 					</div>
 				</div>
 				<div class="tab_cont tp4"> <!-- 보고서 틀 -->
-					<div id="divLeftReportType" class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+					<div id="divLeftReportType" class="btn-group btn-group-sm" role="group" aria-label="Basic example" type="L">
       					<button type="button" class="btn btn-default">1분기</button>
 					    <button type="button" class="btn btn-default">반기</button>
 					    <button type="button" class="btn btn-default">3분기</button>
@@ -41,7 +59,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="card">
+			<div id="divLeftContent" class="card">
 				사업의내용
 			</div>
 		</div>
@@ -55,7 +73,7 @@
 					</div>
 				</div>
 				<div class="tab_cont tp4">
-					<div id="divRightReportType" class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+					<div id="divRightReportType" class="btn-group btn-group-sm" role="group" aria-label="Basic example" type="R">
       					<button type="button" class="btn btn-default">1분기</button>
 					    <button type="button" class="btn btn-default">반기</button>
 					    <button type="button" class="btn btn-default">3분기</button>
@@ -63,7 +81,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="card">
+			<div id="divRightContent" class="card">
 				사업의내용
 			</div>
 		</div>
@@ -85,8 +103,10 @@
 		}
 
 		function fnInitEvent() {
-			$('#divLeftYear').on('click', '.contentYear', fnGetReportTypeList);
-			$('#divRightYear').on('click', '.contentYear', fnGetReportTypeList);
+			$('#divLeftYear').on('click', '.contentYear', fnOnClickContentYear);
+			$('#divRightYear').on('click', '.contentYear', fnOnClickContentYear);
+			$('#divLeftReportType').on('click', '.reportType', fnOnClickReportType);
+			$('#divRightReportType').on('click', '.reportType', fnOnClickReportType);
 		} 
 		
 		function fnGetContentYearList() {
@@ -120,7 +140,7 @@
 			});
 		}
 
-		function fnGetReportTypeList() {
+		function fnOnClickContentYear() {
 			var $this = $(this);
 			var $parentDiv = $this.closest('div'); 
 			$parentDiv.find('.contentYear').removeClass('active');
@@ -141,7 +161,7 @@
 
 					for(var i = 0, length = reportTypeList.length; i < length; i++) {
 						var reportType = reportTypeList[i];
-						htmlArray.push('<button type="button" class="btn btn-default reportType" reportType=' + reportType.reportType + '>' + reportType.reportTypeNm + '</button>');
+						htmlArray.push('<button type="button" class="btn btn-default reportType" uid=' + reportType.uid + '>' + reportType.reportTypeNm + '</button>');
 					}
 
 					if($parentDiv.attr('type') == 'L') {
@@ -157,20 +177,39 @@
 			});
 		}
 
-		function fnGetContent() {
+		function fnOnClickReportType() {
+			var $this = $(this);
+			var $parentDiv = $this.closest('div'); 
+			$parentDiv.find('.reportType').removeClass('active');
+			$this.addClass('active');
+
+			$('.frmAjax').remove();
+			addFormData('frmAjax', 'uid', $this.attr('uid'));
+			
 			$.ajax({
 				type: 'POST',
 				url: getContextPath() + '/getContent',
 				data : $('#frmAjax').serialize(),
 				dataType: 'json',
 				success: function(data) {
-					var vocInfoList = data.vocInfoList;
-					fnMakeVocInfoList(vocInfoList);
-					if(vocInfoList.length > 0) {
-						fnMakeVocPaging(data.paginationInfo);
+					if($parentDiv.attr('type') == 'L') {
+						$('#divLeftContent').html(data.content);
+						//var compResult = diffString($('#divLeftContent').html(), $('#divRightContent').html());
+						var compResult = htmldiff($('#divLeftContent').html(), $('#divRightContent').html());
+						$('#divLeftCompResult').html(compResult);						
 					} else {
-						fnMakeEmptyPaging('vocPaging');
+						$('#divRightContent').html(data.content);
+						
+						
+						//var compResult = diffString($('#divLeftContent').html(), $('#divRightContent').html());
+						var compResult = htmldiff($('#divLeftContent').html(), $('#divRightContent').html());
+						$('#divRightCompResult').html(compResult);
 					}
+					
+					//var compResult = diffString2($('#divLeftContent').text(), $('#divRightContent').text());
+					
+					//$('#divLeftCompResult').html(compResult.n);
+					//$('#divRightCompResult').html(compResult.o);
 				},
 				error : function(x, error) {
 					alert("서버통신 중 오류가 발생하였습니다.");

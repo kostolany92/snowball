@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="corpDao">
+	<resultMap id="corpListMap" 	type="corpVo">
+	    <result column="uid" 				property="uid"/>
+	    <result column="corp_code" 			property="corpCode"/>
+	    <result column="corp_name" 			property="corpName"/>
+	    <result column="stock_code" 		property="stockCode"/>
+	</resultMap>
+	
+    <select id="list" resultMap="corpListMap" parameterType="corpSearchVo">
+		SELECT uid
+		     , corp_code
+		     , corp_name
+		     , stock_code
+		  FROM snowball.tbl_corp
+		 WHERE 1=1
+		 <if test="searchKeyword != null">
+		 AND (stock_code = #{searchKeyword} OR corp_name = #{searchKeyword})
+		 </if>
+    </select>
+    
+    <insert id="insert" parameterType="corpVo">
+    	INSERT INTO snowball.tbl_corp (
+    		corp_code
+    		, corp_name
+    		, stock_code
+    		, modify_date
+    		, reg_time
+    	) VALUES (
+    		#{corpCode}
+    		, #{corpName}
+    		, #{stockCode}
+    		, #{modifyDate}
+    		, NOW()
+    	)
+    </insert>
+    
+    <delete id="delete">
+    	DELETE FROM snowball.tbl_corp
+    </delete>
+</mapper>
+ 

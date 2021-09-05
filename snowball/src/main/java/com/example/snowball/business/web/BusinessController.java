@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -37,24 +36,34 @@ public class BusinessController {
 		mv.setViewName("business/search");
 		return mv;
 	}
-	
+
 	@ResponseBody
 	@RequestMapping("/getContentYearList")
 	public Map<String, Object> getContentYearList(BusinessSearchVo businessSearchVo) throws Exception {
 		Map<String, Object> map = new HashMap<String, Object>();
 
 		map.put("contentYearList", businessService.listContentYear(businessSearchVo));
-		
+
 		return map;
 	}
-	
+
 	@ResponseBody
 	@RequestMapping("/getReportTypeList")
 	public Map<String, Object> getReportTypeList(BusinessSearchVo businessSearchVo) throws Exception {
 		Map<String, Object> map = new HashMap<String, Object>();
 
 		map.put("reportTypeList", businessService.listReportTypeList(businessSearchVo));
-		
+
+		return map;
+	}
+
+	@ResponseBody
+	@RequestMapping("/getContent")
+	public Map<String, Object> getContent(BusinessSearchVo businessSearchVo) throws Exception {
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		map.put("content", businessService.selectContent(businessSearchVo));
+
 		return map;
 	}
 }

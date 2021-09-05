@@ -32,7 +32,7 @@
 		 ORDER BY year DESC
     </select>
 
-	<select id="listReportType" resultType="businessVo" parameterType="businessSearchVo">
+	<select id="listReportType" resultMap="reportTypeListMap" parameterType="businessSearchVo">
 		SELECT uid
 			 , report_type
 		     , CASE report_type WHEN '1' THEN '1분기'
@@ -41,7 +41,14 @@
 		                        WHEN '4' THEN '사업' END AS report_type_nm
 		  FROM snowball.tbl_business_content
 		 WHERE corp_code = #{corpCode}
+		   AND year = #{year}
 		 ORDER BY report_type
+    </select>
+
+	<select id="selectContent" resultType="String" parameterType="businessSearchVo">
+		SELECT content
+		  FROM snowball.tbl_business_content
+		 WHERE uid = #{uid}
     </select>
 
     <insert id="insertContent" parameterType="businessVo">

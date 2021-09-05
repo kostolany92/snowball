@@ -29,6 +29,10 @@ public class BusinessDao {
 	}
 
 	public List<BusinessVo> listReportTypeList(BusinessSearchVo businessSearchVo) {
-		return sqlSessionTemplate.selectList("businessDao.listReportTypeList", businessSearchVo);
+		return sqlSessionTemplate.selectList("businessDao.listReportType", businessSearchVo);
+	}
+
+	public String selectContent(BusinessSearchVo businessSearchVo) {
+		return sqlSessionTemplate.selectOne("businessDao.selectContent", businessSearchVo);
 	}
 }
